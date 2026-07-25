@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroDSJK | Premium Vedic Astrology</title>
+    <meta name="description" content="Discover Your Cosmic Blueprint with AstroDSJK. Generate beautifully designed Vedic horoscope reports through an intuitive modern experience.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons (Toggle) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Cosmic Background -->
+    <div class="cosmic-bg">
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="stars3"></div>
+        <div class="nebula-1"></div>
+        <div class="nebula-2"></div>
+        <div class="aurora"></div>
+        <div class="particles" id="particles"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="logo">AstroDSJK</div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#kundali">Kundali</a>
+                <a href="#charts">Charts</a>
+                <a href="#predictions">Predictions</a>
+                <a href="#panchang">Panchang</a>
+                <a href="#compatibility">Compatibility</a>
+                <a href="#reports">Reports</a>
+                <a href="#about">About</a>
+                <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            <div class="nav-cta">
+                <button class="btn btn-primary">Generate Kundali</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <div class="hero-left">
+                    <h1 class="hero-title">Discover Your<br>Cosmic Blueprint</h1>
+                    <p class="hero-subtitle">Generate beautifully designed Vedic horoscope reports through an intuitive modern experience. Cast on the Lahiri ayanamsa with sidereal longitudes and whole-sign houses, ensuring maximum astrological precision.</p>
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary btn-large">Generate Kundali</button>
+                        <button class="btn btn-secondary btn-large">Explore Features</button>
+                    </div>
+                    <div class="trust-indicators">
+                        <span class="trust-badge">20+ Charts</span>
+                        <span class="trust-badge">10,000+ Cities</span>
+                        <span class="trust-badge">KP System</span>
+                        <span class="trust-badge">Daily Panchang</span>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="kundali-3d-wrapper" id="kundali-3d-wrapper">
+                        <div class="zodiac-wheel-glow"></div>
+                        <div class="zodiac-wheel"></div>
+                        <div class="orbiting-planets">
+                            <div class="orbit-ring"></div>
+                            <div class="planet p-sun"></div>
+                            <div class="planet p-moon"></div>
+                            <div class="planet p-jupiter"></div>
+                        </div>
+                        <div class="kundali-chart-3d">
+                            <svg viewBox="0 0 100 100" width="100%" height="100%" class="kundali-svg">
+                                <rect x="5" y="5" width="90" height="90" fill="rgba(255,255,255,0.02)" stroke="var(--accent-primary)" stroke-width="1" />
+                                <line x1="5" y1="5" x2="95" y2="95" stroke="var(--accent-primary)" stroke-width="1" />
+                                <line x1="5" y1="95" x2="95" y2="5" stroke="var(--accent-primary)" stroke-width="1" />
+                                <polygon points="50,5 95,50 50,95 5,50" fill="rgba(124, 77, 255, 0.05)" stroke="var(--accent-primary)" stroke-width="1" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Birth Details Section -->
+        <section id="kundali" class="birth-details-section">
+            <div class="glass-card birth-form-card">
+                <h2 class="section-title text-center">Birth Details</h2>
+                <form class="birth-form">
+                    <div class="form-group">
+                        <input type="text" id="fullName" required placeholder=" " value="John Doe">
+                        <label for="fullName">Full Name</label>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <input type="date" id="dob" required placeholder=" " value="1995-05-15">
+                            <label for="dob">Date of Birth</label>
+                        </div>
+                        <div class="form-group half">
+                            <input type="time" id="tob" required placeholder=" " value="10:30">
+                            <label for="tob">Time of Birth</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="birthPlace" required placeholder=" " value="New Delhi">
+                        <label for="birthPlace">Birth Place</label>
+                        <!-- Autocomplete UI placeholder -->
+                        <div class="autocomplete-dropdown hidden">
+                            <div class="ac-item">Delhi</div>
+                            <div class="ac-item">Mumbai</div>
+                            <div class="ac-item">Jaipur</div>
+                            <div class="ac-item">London</div>
+                            <div class="ac-item">New York</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group third">
+                            <input type="number" id="lat" step="any" required placeholder=" " value="28.6139">
+                            <label for="lat">Latitude (°N)</label>
+                        </div>
+                        <div class="form-group third">
+                            <input type="number" id="long" step="any" required placeholder=" " value="77.2090">
+                            <label for="long">Longitude (°E)</label>
+                        </div>
+                        <div class="form-group third">
+                            <input type="number" id="timezone" step="any" required placeholder=" " value="5.5">
+                            <label for="timezone">Timezone Offset (hrs)</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <select id="chartStyle" required>
+                                <option value="north" selected>North Indian (Diamond)</option>
+                                <option value="south">South Indian (Box)</option>
+                                <option value="east">East Indian (Square)</option>
+                            </select>
+                            <label for="chartStyle">Chart Style Format</label>
+                        </div>
+                        <div class="form-group half">
+                            <select id="gender" required>
+                                <option value="male" selected>Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <label for="gender">Gender</label>
+                        </div>
+                    </div>
+                    <div class="form-buttons-row" style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button type="button" id="generateChartBtn" class="btn btn-primary btn-full glowing-btn">Generate Horoscope</button>
+                        <button type="button" id="export-pdf-btn" class="btn btn-secondary btn-full">Print / Export PDF Report</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- SVG Main Chart Display Container -->
+            <div id="chartDisplayCard" class="glass-card printable-report-card" style="margin-top: 2rem; padding: 1.5rem; text-align: center;">
+                <h3 style="margin-bottom: 1rem; color: var(--accent-primary);">Generated Vedic Horoscope Chart</h3>
+                <div id="chartDisplay" class="chart-display-container" style="max-width: 500px; margin: 0 auto;"></div>
+            </div>
+        </section>
+
+        <!-- Feature Highlights -->
+        <section id="features" class="features-section">
+            <h2 class="section-title text-center mb-12">Premium Features</h2>
+            <div class="features-grid">
+                <!-- Cards injected via JS or written directly -->
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M2 12h20"></path></svg></div>
+                    <h3>Birth Charts</h3>
+                    <p>Precise astronomical calculations.</p>
+                    <div class="arrow-anim">→</div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h4l3-9 5 18 3-9h5"></path></svg></div>
+                    <h3>KP Astrology</h3>
+                    <p>Advanced stellar predictions.</p>
+                    <div class="arrow-anim">→</div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 22h20L12 2z"></path></svg></div>
+                    <h3>Jaimini System</h3>
+                    <p>Deep karmic analysis.</p>
+                    <div class="arrow-anim">→</div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                    <h3>Planetary Details</h3>
+                    <p>Comprehensive celestial positions.</p>
+                    <div class="arrow-anim">→</div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+                    <h3>Dasha Timeline</h3>
+                    <p>Detailed chronological periods.</p>
+                    <div class="arrow-anim">→</div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
+                    <h3>Daily Panchang</h3>
+                    <p>Five-fold auspicious elements.</p>
+                    <div class="arrow-anim">→</div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+                    <h3>Yogas</h3>
+                    <p>Powerful planetary combinations.</p>
+                    <div class="arrow-anim">→</div>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></div>
+                    <h3>Compatibility</h3>
+                    <p>Deep relationship synastry.</p>
+                    <div class="arrow-anim">→</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chart Preview Section -->
+        <section id="charts" class="chart-preview-section">
+            <h2 class="section-title text-center mb-12">Beautiful Chart Variations</h2>
+            <div class="chart-cards-grid">
+                <div class="chart-card glass-card">
+                    <div class="chart-illus north-indian"></div>
+                    <div class="chart-card-content">
+                        <h3>North Indian</h3>
+                        <p>A diamond-style chart focusing on houses. The first house (ascendant) is always at the top diamond, creating a clear map of planetary placements.</p>
+                        <button class="btn btn-outline">Preview</button>
+                    </div>
+                </div>
+                <div class="chart-card glass-card">
+                    <div class="chart-illus south-indian"></div>
+                    <div class="chart-card-content">
+                        <h3>South Indian</h3>
+                        <p>A square-style chart focusing on zodiac signs. Aries is always in the top left, making it highly intuitive for tracking planetary transits.</p>
+                        <button class="btn btn-outline">Preview</button>
+                    </div>
+                </div>
+                <div class="chart-card glass-card">
+                    <div class="chart-illus east-indian"></div>
+                    <div class="chart-card-content">
+                        <h3>East Indian</h3>
+                        <p>The traditional Sun-style chart popular in eastern regions, blending the focus on both fixed zodiac signs and angular houses.</p>
+                        <button class="btn btn-outline">Preview</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Planet Dashboard -->
+        <section id="planets" class="planet-dashboard-section">
+            <h2 class="section-title text-center mb-12">Planetary Positions & Strengths</h2>
+            <p class="text-center mb-12" style="max-width: 800px; margin: 0 auto 3rem; color: var(--text-secondary);">House placement is where most interpretation begins. Review Ashtakavarga and Shadbala scores below to assess which planets carry real weight, and trace your Mahadasha timeline to see which themes are currently active.</p>
+            <div class="planet-grid">
+                <!-- Example Planet Cards -->
+                <div class="planet-card glass-card">
+                    <div class="planet-header">
+                        <div class="planet-icon sun-icon"></div>
+                        <h3>Sun (Surya)</h3>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat"><span class="label">Sign</span><span class="value">Aries</span></div>
+                        <div class="stat"><span class="label">House</span><span class="value">1st</span></div>
+                        <div class="stat"><span class="label">Degree</span><span class="value font-num">15° 24'</span></div>
+                    </div>
+                    <div class="planet-status badge-exalted">Exalted</div>
+                </div>
+                <div class="planet-card glass-card">
+                    <div class="planet-header">
+                        <div class="planet-icon moon-icon"></div>
+                        <h3>Moon (Chandra)</h3>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat"><span class="label">Sign</span><span class="value">Cancer</span></div>
+                        <div class="stat"><span class="label">House</span><span class="value">4th</span></div>
+                        <div class="stat"><span class="label">Degree</span><span class="value font-num">02° 11'</span></div>
+                    </div>
+                    <div class="planet-status badge-own">Own House</div>
+                </div>
+                <div class="planet-card glass-card">
+                    <div class="planet-header">
+                        <div class="planet-icon mars-icon"></div>
+                        <h3>Mars (Mangal)</h3>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat"><span class="label">Sign</span><span class="value">Cancer</span></div>
+                        <div class="stat"><span class="label">House</span><span class="value">4th</span></div>
+                        <div class="stat"><span class="label">Degree</span><span class="value font-num">18° 42'</span></div>
+                    </div>
+                    <div class="planet-status badge-debilitated">Debilitated</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dasha Timeline -->
+        <section id="predictions" class="dasha-section">
+            <h2 class="section-title text-center mb-12">Vimshottari Dasha</h2>
+            <div class="dasha-timeline glass-card printable-report-card" id="dashaAccordion">
+                <div class="timeline-line">
+                    <div class="timeline-progress"></div>
+                </div>
+                <div class="dasha-nodes">
+                    <div class="dasha-node past">
+                        <div class="node-circle"></div>
+                        <div class="node-content">
+                            <h4>Moon</h4>
+                            <span class="font-num">2010 - 2020</span>
+                        </div>
+                    </div>
+                    <div class="dasha-node active">
+                        <div class="node-circle"></div>
+                        <div class="node-content">
+                            <h4>Mars</h4>
+                            <span class="font-num">2020 - 2027</span>
+                        </div>
+                        <div class="node-details">
+                            <p>Current Mahadasha focusing on energy, drive, and real estate.</p>
+                        </div>
+                    </div>
+                    <div class="dasha-node future">
+                        <div class="node-circle"></div>
+                        <div class="node-content">
+                            <h4>Rahu</h4>
+                            <span class="font-num">2027 - 2045</span>
+                        </div>
+                    </div>
+                    <div class="dasha-node future">
+                        <div class="node-circle"></div>
+                        <div class="node-content">
+                            <h4>Jupiter</h4>
+                            <span class="font-num">2045 - 2061</span>
+                        </div>
+                    </div>
+                    <div class="dasha-node future">
+                        <div class="node-circle"></div>
+                        <div class="node-content">
+                            <h4>Saturn</h4>
+                            <span class="font-num">2061 - 2080</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Yoga Analysis -->
+        <section class="yoga-section">
+            <h2 class="section-title text-center mb-12">Yoga Analysis</h2>
+            <div class="yoga-grid">
+                <div class="yoga-card glass-card">
+                    <div class="yoga-header">
+                        <h3>Gajakesari Yoga</h3>
+                    </div>
+                    <div class="yoga-strength">
+                        <svg class="circular-progress" viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="40" fill="none" stroke-width="8"></circle>
+                            <circle class="progress" cx="50" cy="50" r="40" fill="none" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="37.68"></circle>
+                        </svg>
+                        <span class="percentage font-num">85%</span>
+                    </div>
+                    <p class="yoga-desc">Formed by Jupiter in Kendra from Moon. Brings wisdom, wealth, and lasting fame.</p>
+                </div>
+                <div class="yoga-card glass-card">
+                    <div class="yoga-header">
+                        <h3>Ruchaka Yoga</h3>
+                    </div>
+                    <div class="yoga-strength">
+                        <svg class="circular-progress" viewBox="0 0 100 100">
+                            <circle class="bg" cx="50" cy="50" r="40" fill="none" stroke-width="8"></circle>
+                            <circle class="progress" cx="50" cy="50" r="40" fill="none" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="75.36"></circle>
+                        </svg>
+                        <span class="percentage font-num">70%</span>
+                    </div>
+                    <p class="yoga-desc">Mars in exaltation or own sign in Kendra. Grants courage, leadership, and physical strength.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compatibility -->
+        <section id="compatibility" class="compatibility-section">
+            <h2 class="section-title text-center mb-12">Kundali Matching (Ashta Kuta)</h2>
+            <div class="glass-card mb-12">
+                <form class="match-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="partner-form">
+                        <h4 style="margin-bottom: 1rem; color: var(--accent-primary);">Boy's Details</h4>
+                        <div class="form-group mb-4">
+                            <input type="text" id="boyName" placeholder=" " value="Boy Native">
+                            <label for="boyName">Full Name</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <input type="date" id="boyDob" value="1994-08-20">
+                                <label for="boyDob">Date of Birth</label>
+                            </div>
+                            <div class="form-group half">
+                                <input type="time" id="boyTob" value="14:15">
+                                <label for="boyTob">Time of Birth</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="partner-form">
+                        <h4 style="margin-bottom: 1rem; color: var(--accent-primary);">Girl's Details</h4>
+                        <div class="form-group mb-4">
+                            <input type="text" id="girlName" placeholder=" " value="Girl Native">
+                            <label for="girlName">Full Name</label>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group half">
+                                <input type="date" id="girlDob" value="1996-11-10">
+                                <label for="girlDob">Date of Birth</label>
+                            </div>
+                            <div class="form-group half">
+                                <input type="time" id="girlTob" value="09:45">
+                                <label for="girlTob">Time of Birth</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <button type="button" id="calcMatchBtn" class="btn btn-primary btn-full mt-4" style="margin-top: 1.5rem;">Calculate Gun Milan (36 Points)</button>
+            </div>
+            
+            <div class="comp-container glass-card printable-report-card" id="matchResultsContainer">
+                <div class="comp-profile boy">
+                    <h3 id="resBoyName">Boy Native</h3>
+                    <p id="resBoyMoon">Moon in Scorpio</p>
+                </div>
+                <div class="comp-score-center">
+                    <div class="score-circle">
+                        <div class="score-ring"></div>
+                        <div class="score-value font-num" id="gunaScoreVal">31<span class="total">/36</span></div>
+                        <div class="score-label" id="gunaVerdict">Excellent Match</div>
+                    </div>
+                </div>
+                <div class="comp-profile girl">
+                    <h3 id="resGirlName">Girl Native</h3>
+                    <p id="resGirlMoon">Moon in Pisces</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ashtakavarga -->
+        <section class="ashtakavarga-section">
+            <h2 class="section-title text-center mb-12">Ashtakavarga Heatmap</h2>
+            <div class="glass-card table-responsive">
+                <table class="heatmap-table font-num">
+                    <thead>
+                        <tr>
+                            <th>Sign / Planet</th>
+                            <th>Su</th>
+                            <th>Mo</th>
+                            <th>Ma</th>
+                            <th>Me</th>
+                            <th>Ju</th>
+                            <th>Ve</th>
+                            <th>Sa</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Ar</td><td class="h-3">3</td><td class="h-4">4</td><td class="h-2">2</td><td class="h-5">5</td><td class="h-4">4</td><td class="h-6">6</td><td class="h-2">2</td><td class="h-high">26</td></tr>
+                        <tr><td>Ta</td><td class="h-5">5</td><td class="h-6">6</td><td class="h-4">4</td><td class="h-3">3</td><td class="h-7">7</td><td class="h-5">5</td><td class="h-4">4</td><td class="h-high">34</td></tr>
+                        <tr><td>Ge</td><td class="h-2">2</td><td class="h-3">3</td><td class="h-1">1</td><td class="h-4">4</td><td class="h-2">2</td><td class="h-3">3</td><td class="h-1">1</td><td class="h-low">16</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Dashboard Mixed Section -->
+        <section id="panchang" class="mixed-dash-section">
+            <div class="dashboard-grid">
+                <!-- Panchang Widgets -->
+                <div class="dash-widget glass-card span-2 printable-report-card" id="panchangSection">
+                    <h3 class="widget-title">Daily Panchang</h3>
+                    <div class="panchang-grid">
+                        <div class="p-item"><span class="p-label">Sunrise</span><span class="p-val font-num">06:14 AM</span></div>
+                        <div class="p-item"><span class="p-label">Sunset</span><span class="p-val font-num">07:22 PM</span></div>
+                        <div class="p-item"><span class="p-label">Tithi</span><span class="p-val">Shukla Ashtami</span></div>
+                        <div class="p-item"><span class="p-label">Nakshatra</span><span class="p-val">Rohini</span></div>
+                        <div class="p-item"><span class="p-label">Yoga</span><span class="p-val">Vaidhriti</span></div>
+                        <div class="p-item"><span class="p-label">Karana</span><span class="p-val">Bava</span></div>
+                    </div>
+                </div>
+                <!-- Today's Cosmic Snapshot -->
+                <div class="dash-widget glass-card cosmic-snapshot">
+                    <h3 class="widget-title">Cosmic Snapshot</h3>
+                    <div class="snapshot-content">
+                        <div class="snapshot-highlight">Moon in Taurus</div>
+                        <p>A favorable day for financial planning and stable endeavors.</p>
+                        <div class="snapshot-visual">
+                            <div class="s-moon-icon"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report Preview Section -->
+        <section id="reports" class="report-preview-section">
+            <h2 class="section-title text-center mb-12">Premium Reports</h2>
+            <div class="reports-container">
+                <div class="report-stack">
+                    <div class="report-page page-3 glass-card"></div>
+                    <div class="report-page page-2 glass-card"></div>
+                    <div class="report-page page-1 glass-card">
+                        <div class="report-mockup-content">
+                            <h3>AstroDSJK</h3>
+                            <h4>Comprehensive Horoscope</h4>
+                            <div class="mockup-chart"></div>
+                            <div class="mockup-lines"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="report-info">
+                    <h3>Download Your Destiny</h3>
+                    <p>Beautifully formatted PDF reports ready for print. Complete analysis spanning 50+ pages.</p>
+                    <button class="btn btn-primary glowing-btn mt-4">Download Sample</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Understanding Your Kundali Section -->
+        <section id="understanding" class="understanding-section">
+            <h2 class="section-title text-center mb-12">Understanding Your Kundali</h2>
+            <div class="features-grid">
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><i class="fas fa-star"></i></div>
+                    <h3>Lagna & Planetary Positions</h3>
+                    <p>The chart opens with your ascendant and the sign, degree, and nakshatra of every graha. House placement is where most interpretation begins.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+                    <h3>Rashi (D1) and Navamsa (D9)</h3>
+                    <p>The D1 shows the broad layout of your life, while the Navamsa (D9) carries the deeper strength of a planet and a great deal of marriage and dharma indication.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><i class="fas fa-hourglass-half"></i></div>
+                    <h3>Vimshottari Dasha</h3>
+                    <p>The timing backbone of a Parashari reading. It marks the period you are in now, down through Mahadasha, Antardasha, and finer levels.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon"><i class="fas fa-dharmachakra"></i></div>
+                    <h3>Yogas & Jaimini Karakas</h3>
+                    <p>Recognised planetary combinations (Yogas) and soul significators (Chara Karakas) like the Atmakaraka are calculated to understand temperament and life direction.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section" id="faq">
+            <h2 class="section-title text-center mb-12">Frequently Asked Questions</h2>
+            <div class="faq-accordion">
+                <div class="faq-item glass-card">
+                    <button class="faq-question">Is this kundali calculator free?<span class="icon">+</span></button>
+                    <div class="faq-answer"><p>Yes. You can generate as many charts as you like at no cost, and you can download a chart image or copy a shareable link for each one.</p></div>
+                </div>
+                <div class="faq-item glass-card">
+                    <button class="faq-question">What ayanamsa does it use?<span class="icon">+</span></button>
+                    <div class="faq-answer"><p>It uses the Lahiri ayanamsa with sidereal positions and whole-sign houses, exactly matching standard rigorous calculations.</p></div>
+                </div>
+                <div class="faq-item glass-card">
+                    <button class="faq-question">Do I need my exact birth time?<span class="icon">+</span></button>
+                    <div class="faq-answer"><p>For the ascendant, the houses, and an accurate dasha, yes. The planetary signs hold steady, but the house framework shifts with time.</p></div>
+                </div>
+                <div class="faq-item glass-card">
+                    <button class="faq-question">Will this predict my future?<span class="icon">+</span></button>
+                    <div class="faq-answer"><p>It shows timing and tendency, not certainty. The chart can tell you when a theme is likely to be active, helping you prepare and choose well.</p></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-constellation"></div>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>AstroDSJK</h2>
+                <p>Luxury celestial insights for the modern era.</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Platform</h4>
+                    <a href="#">Features</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">API</a>
+                </div>
+                <div class="link-group">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+                <div class="link-group">
+                    <h4>Social</h4>
+                    <a href="#">Twitter</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 AstroDSJK. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/astrology-engine.js"></script>
+    <script src="js/chart-renderer.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

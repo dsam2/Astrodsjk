@@ -1,0 +1,473 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Sticky Navbar
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // 2. Mouse Parallax Effect
+    const heroRight = document.querySelector('.hero-right');
+    const particles = document.getElementById('particles');
+
+    // Create particles safely if particles container exists
+    if (particles) {
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.width = Math.random() * 4 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.background = '#64748b';
+            particle.style.borderRadius = '50%';
+            particle.style.top = Math.random() * 100 + 'vh';
+            particle.style.left = Math.random() * 100 + 'vw';
+            particle.style.opacity = Math.random() * 0.5;
+            particle.style.boxShadow = '0 0 10px rgba(0,0,0,0.1)';
+            particle.dataset.speedx = (Math.random() - 0.5) * 0.5;
+            particle.dataset.speedy = (Math.random() - 0.5) * 0.5;
+            particles.appendChild(particle);
+        }
+    }
+
+    const wrapper = document.querySelector('.kundali-3d-wrapper');
+    if (heroRight && wrapper) {
+        heroRight.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth - e.pageX * 2) / 100;
+            const y = (window.innerHeight - e.pageY * 2) / 100;
+            wrapper.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+        });
+        
+        heroRight.addEventListener('mouseleave', () => {
+            wrapper.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+    }
+
+    // 3. Autocomplete & City Details UI
+    const birthPlaceInput = document.getElementById('birthPlace');
+    const autocompleteDropdown = document.querySelector('.autocomplete-dropdown');
+    
+    if (birthPlaceInput && autocompleteDropdown) {
+        birthPlaceInput.addEventListener('focus', () => {
+            autocompleteDropdown.classList.remove('hidden');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!birthPlaceInput.contains(e.target) && !autocompleteDropdown.contains(e.target)) {
+                autocompleteDropdown.classList.add('hidden');
+            }
+        });
+        
+        const items = autocompleteDropdown.querySelectorAll('.ac-item');
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                birthPlaceInput.value = item.textContent;
+                autocompleteDropdown.classList.add('hidden');
+                // Auto-lookup city coordinates if available
+                if (window.AstroEngine && window.AstroEngine.CITIES_DB) {
+                    const cityObj = AstroEngine.CITIES_DB.find(c => c.name.toLowerCase().includes(item.textContent.toLowerCase()));
+                    if (cityObj) {
+                        const latEl = document.getElementById('lat');
+                        const longEl = document.getElementById('long');
+                        const tzEl = document.getElementById('timezone');
+                        if (latEl) latEl.value = cityObj.lat;
+                        if (longEl) longEl.value = cityObj.lng;
+                        if (tzEl) tzEl.value = cityObj.tz;
+                    }
+                }
+                triggerCalculation(false);
+            });
+        });
+    }
+
+    // 4. FAQ Accordion
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+        const btn = item.querySelector('.faq-question');
+        if (btn) {
+            btn.addEventListener('click', () => {
+                faqItems.forEach(other => {
+                    if (other !== item) other.classList.remove('active');
+                });
+                item.classList.toggle('active');
+            });
+        }
+    });
+
+    // 5. Scroll Reveals (Intersection Observer)
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    const revealElements = document.querySelectorAll('.glass-card, .section-title, .dasha-node');
+    revealElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+        observer.observe(el);
+    });
+
+    // 6. Theme Toggle
+    const themeToggleBtn = document.getElementById('themeToggle');
+    if (themeToggleBtn) {
+        const themeIcon = themeToggleBtn.querySelector('i');
+        const savedTheme = localStorage.getItem('astro-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        let currentTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+        
+        const updateThemeState = () => {
+            if (currentTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (themeIcon) themeIcon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                if (themeIcon) themeIcon.classList.replace('fa-sun', 'fa-moon');
+            }
+            
+            document.querySelectorAll('#particles div').forEach(p => {
+                p.style.background = currentTheme === 'dark' ? '#fff' : '#64748b';
+                p.style.boxShadow = currentTheme === 'dark' ? '0 0 10px #fff' : '0 0 10px rgba(0,0,0,0.1)';
+            });
+        };
+        
+        updateThemeState();
+        
+        themeToggleBtn.addEventListener('click', () => {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('astro-theme', currentTheme);
+            updateThemeState();
+        });
+    }
+
+    // 7. Interactive Offline Horoscope Generator & Ephemeris Engine
+    const triggerCalculation = (scroll = true) => {
+        if (!window.AstroEngine || !window.ChartRenderer) return;
+        const fullName = document.getElementById('fullName')?.value || "Native";
+        const dob = document.getElementById('dob')?.value || "1995-05-15";
+        const tob = document.getElementById('tob')?.value || "10:30";
+        const cityName = document.getElementById('birthPlace')?.value || "New Delhi";
+        const latVal = parseFloat(document.getElementById('lat')?.value) || 28.6139;
+        const longVal = parseFloat(document.getElementById('long')?.value) || 77.2090;
+        const tzVal = parseFloat(document.getElementById('timezone')?.value) || 5.5;
+        const chartStyle = document.getElementById('chartStyle')?.value || "north";
+
+        // Parse Date & Time
+        const dateParts = dob.split('-').map(Number);
+        const timeParts = tob.split(':').map(Number);
+
+        let year = dateParts[0] || 1995;
+        let month = dateParts[1] || 5;
+        let day = dateParts[2] || 15;
+        let hour = timeParts[0] || 10;
+        let minute = timeParts[1] || 30;
+
+        // Julian Day & Ephemeris Calculation
+        let JD = AstroEngine.julianDay(year, month, day, hour, minute, 0, tzVal);
+        let planets = AstroEngine.calculatePlanets(JD, latVal, longVal);
+        let vargas = AstroEngine.calculateVargas(planets);
+
+        // Render SVG Chart based on selected style
+        let selectedSvg = '';
+        if (chartStyle === 'south') {
+            selectedSvg = ChartRenderer.renderSouthIndianSVG(vargas.D1, vargas.D1.Ascendant);
+        } else if (chartStyle === 'east') {
+            selectedSvg = ChartRenderer.renderEastIndianSVG(vargas.D1, vargas.D1.Ascendant);
+        } else {
+            selectedSvg = ChartRenderer.renderNorthIndianSVG(vargas.D1, vargas.D1.Ascendant);
+        }
+
+        let northSvg = ChartRenderer.renderNorthIndianSVG(vargas.D1, vargas.D1.Ascendant);
+        let southSvg = ChartRenderer.renderSouthIndianSVG(vargas.D1);
+        let eastSvg = ChartRenderer.renderEastIndianSVG(vargas.D1, vargas.D1.Ascendant);
+
+        // Update SVG Containers
+        let chartDisplay = document.getElementById('chartDisplay');
+        if (chartDisplay) chartDisplay.innerHTML = selectedSvg;
+
+        let hero3d = document.querySelector('.kundali-chart-3d');
+        if (hero3d) hero3d.innerHTML = selectedSvg;
+
+        let northCard = document.querySelector('.chart-illus.north-indian');
+        if (northCard) northCard.innerHTML = northSvg;
+
+        let southCard = document.querySelector('.chart-illus.south-indian');
+        if (southCard) southCard.innerHTML = southSvg;
+
+        let eastCard = document.querySelector('.chart-illus.east-indian');
+        if (eastCard) eastCard.innerHTML = eastSvg;
+
+        // Render Planetary Position Cards
+        const planetGrid = document.querySelector('.planet-grid');
+        if (planetGrid) {
+            let planetHTML = '';
+            const planetList = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn', 'Rahu', 'Ketu'];
+
+            planetList.forEach(p => {
+                let info = AstroEngine.getDegreeInfo(planets[p]);
+                let isExalted = (p === 'Sun' && info.rashiIndex === 1) || (p === 'Moon' && info.rashiIndex === 2);
+                let isDebilitated = (p === 'Sun' && info.rashiIndex === 7) || (p === 'Mars' && info.rashiIndex === 4);
+                let badgeClass = isExalted ? 'badge-exalted' : isDebilitated ? 'badge-debilitated' : 'badge-own';
+                let badgeText = isExalted ? 'Exalted' : isDebilitated ? 'Debilitated' : 'Direct';
+
+                planetHTML += `
+                    <div class="planet-card glass-card">
+                        <div class="planet-header">
+                            <div class="planet-icon ${p.toLowerCase()}-icon"></div>
+                            <h3>${p}</h3>
+                        </div>
+                        <div class="planet-stats">
+                            <div class="stat"><span class="label">Sign</span><span class="value">${info.rashiName} (${info.rashiHindi})</span></div>
+                            <div class="stat"><span class="label">Degree</span><span class="value font-num">${info.rashiDeg}</span></div>
+                            <div class="stat"><span class="label">Nakshatra</span><span class="value">${info.nakshatraName} (P${info.pada})</span></div>
+                        </div>
+                        <div class="planet-status ${badgeClass}">${badgeText}</div>
+                    </div>
+                `;
+            });
+            planetGrid.innerHTML = planetHTML;
+        }
+
+        // Render Panchang
+        let dayOfWeek = new Date(year, month - 1, day).getDay();
+        let panchang = AstroEngine.calculatePanchang(planets.Sun, planets.Moon, dayOfWeek);
+        const panchangGrid = document.querySelector('.panchang-grid');
+        if (panchangGrid) {
+            panchangGrid.innerHTML = `
+                <div class="p-item"><span class="p-label">Tithi</span><span class="p-val">${panchang.tithiName} (${panchang.paksha})</span></div>
+                <div class="p-item"><span class="p-label">Nakshatra</span><span class="p-val">${panchang.nakshatraName}</span></div>
+                <div class="p-item"><span class="p-label">Yoga</span><span class="p-val">${panchang.yogaName}</span></div>
+                <div class="p-item"><span class="p-label">Karana</span><span class="p-val">${panchang.karanaName}</span></div>
+                <div class="p-item"><span class="p-label">Vara</span><span class="p-val">${panchang.varaName}</span></div>
+                <div class="p-item"><span class="p-label">Ayanamsa</span><span class="p-val font-num">${planets.ayanamsa.toFixed(2)}° Lahiri</span></div>
+            `;
+        }
+
+        // Render Dasha Timeline & Accordion
+        let birthDateObj = new Date(year, month - 1, day);
+        let dashaTimeline = AstroEngine.calculateVimshottari(planets.Moon, birthDateObj);
+        const dashaAccordion = document.getElementById('dashaAccordion');
+        const dashaNodes = document.querySelector('.dasha-nodes');
+        
+        if (dashaNodes) {
+            let dashaHTML = '';
+            let now = new Date();
+
+            dashaTimeline.slice(0, 9).forEach((d, idx) => {
+                let startDate = new Date(d.start);
+                let endDate = new Date(d.end);
+                let status = (now >= startDate && now <= endDate) ? 'active' : (now > endDate) ? 'past' : 'future';
+
+                let antardashaHTML = '';
+                if (d.antardashas) {
+                    antardashaHTML = d.antardashas.map(ad => `
+                        <div class="antardasha-item" style="margin-top: 0.25rem; font-size: 0.8rem; color: var(--text-secondary);">
+                            • ${ad.lord}: ${ad.start.slice(0,10)} to ${ad.end.slice(0,10)}
+                        </div>
+                    `).join('');
+                }
+
+                dashaHTML += `
+                    <div class="dasha-node ${status} accordion-item" data-index="${idx}" style="cursor: pointer;">
+                        <div class="node-circle"></div>
+                        <div class="node-content">
+                            <h4>${d.planet} Mahadasha</h4>
+                            <span class="font-num">${d.start.slice(0,4)} - ${d.end.slice(0,4)}</span>
+                            <div class="dasha-accordion-content hidden" style="margin-top: 0.5rem; text-align: left;">
+                                ${antardashaHTML}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            dashaNodes.innerHTML = dashaHTML;
+
+            // Wire click to expand accordion items
+            dashaNodes.querySelectorAll('.accordion-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const content = item.querySelector('.dasha-accordion-content');
+                    if (content) {
+                        content.classList.toggle('hidden');
+                    }
+                });
+            });
+        }
+
+        // Smooth Scroll if requested
+        if (scroll) {
+            const chartDisplayCard = document.getElementById('chartDisplayCard');
+            if (chartDisplayCard) {
+                const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 80;
+                const targetPos = chartDisplayCard.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 20;
+                window.scrollTo({ top: targetPos, behavior: 'smooth' });
+            }
+        }
+    };
+
+    // Initial default preview render on page load
+    if (window.AstroEngine && window.ChartRenderer) {
+        triggerCalculation(false);
+    }
+
+    // Form Generate Buttons & Event Listeners
+    const formGenBtn = document.getElementById('generateChartBtn') || document.querySelector('.birth-form button');
+    if (formGenBtn) {
+        formGenBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            triggerCalculation(true);
+        });
+    }
+
+    const birthForm = document.querySelector('.birth-form');
+    if (birthForm) {
+        birthForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            triggerCalculation(true);
+        });
+    }
+
+    // Update on chart style change
+    const chartStyleSelect = document.getElementById('chartStyle');
+    if (chartStyleSelect) {
+        chartStyleSelect.addEventListener('change', () => {
+            triggerCalculation(false);
+        });
+    }
+
+    // Interactive Preview Buttons on Chart Cards (North, South, East)
+    const chartCards = document.querySelectorAll('.chart-card');
+    chartCards.forEach(card => {
+        const previewBtn = card.querySelector('.btn-outline');
+        const cardTitle = card.querySelector('h3')?.textContent.toLowerCase();
+        
+        if (previewBtn) {
+            previewBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                let styleVal = 'north';
+                if (cardTitle?.includes('south')) styleVal = 'south';
+                else if (cardTitle?.includes('east')) styleVal = 'east';
+
+                if (chartStyleSelect) chartStyleSelect.value = styleVal;
+                triggerCalculation(true);
+            });
+        }
+    });
+
+    // Hero & Navbar Generate Buttons
+    const topCTA = document.querySelectorAll('.nav-cta button, .hero-buttons .btn-primary');
+    topCTA.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const formSec = document.getElementById('kundali');
+            if (formSec) {
+                const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 80;
+                const targetPos = formSec.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 20;
+                window.scrollTo({ top: targetPos, behavior: 'smooth' });
+                document.getElementById('fullName')?.focus();
+            }
+        });
+    });
+
+    // Smooth Scroll for Navigation Bar Links
+    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+    navAnchors.forEach(anchor => {
+        anchor.addEventListener('click', (e) => {
+            const targetId = anchor.getAttribute('href');
+            if (targetId && targetId !== '#') {
+                const targetSec = document.querySelector(targetId);
+                if (targetSec) {
+                    e.preventDefault();
+                    const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 80;
+                    const targetPos = targetSec.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 20;
+                    window.scrollTo({ top: targetPos, behavior: 'smooth' });
+                    history.pushState(null, null, targetId);
+                }
+            }
+        });
+    });
+
+    // 8. Kundali Matching (Gun Milan Calculator)
+    const calcMatchBtn = document.getElementById('calcMatchBtn');
+    if (calcMatchBtn && window.AstroEngine) {
+        calcMatchBtn.addEventListener('click', () => {
+            const boyName = document.getElementById('boyName')?.value || "Boy Native";
+            const boyDob = document.getElementById('boyDob')?.value || "1994-08-20";
+            const boyTob = document.getElementById('boyTob')?.value || "14:15";
+
+            const girlName = document.getElementById('girlName')?.value || "Girl Native";
+            const girlDob = document.getElementById('girlDob')?.value || "1996-11-10";
+            const girlTob = document.getElementById('girlTob')?.value || "09:45";
+
+            // Boy calculations
+            let boyParts = boyDob.split('-').map(Number);
+            let boyTimeParts = boyTob.split(':').map(Number);
+            let boyJD = AstroEngine.julianDay(boyParts[0]||1994, boyParts[1]||8, boyParts[2]||20, boyTimeParts[0]||14, boyTimeParts[1]||15, 0, 5.5);
+            let boyPlanets = AstroEngine.calculatePlanets(boyJD, 28.61, 77.20);
+            let boyMoonInfo = AstroEngine.getDegreeInfo(boyPlanets.Moon);
+            let boyManglik = AstroEngine.calculateManglikDosha(boyPlanets);
+
+            // Girl calculations
+            let girlParts = girlDob.split('-').map(Number);
+            let girlTimeParts = girlTob.split(':').map(Number);
+            let girlJD = AstroEngine.julianDay(girlParts[0]||1996, girlParts[1]||11, girlParts[2]||10, girlTimeParts[0]||9, girlTimeParts[1]||45, 0, 5.5);
+            let girlPlanets = AstroEngine.calculatePlanets(girlJD, 28.61, 77.20);
+            let girlMoonInfo = AstroEngine.getDegreeInfo(girlPlanets.Moon);
+            let girlManglik = AstroEngine.calculateManglikDosha(girlPlanets);
+
+            // Gun Milan & Synastry
+            let match = AstroEngine.calculateGunMilan(boyPlanets.Moon, girlPlanets.Moon);
+
+            // Update UI
+            const resBoyNameEl = document.getElementById('resBoyName');
+            if (resBoyNameEl) resBoyNameEl.textContent = boyName;
+
+            const resBoyMoonEl = document.getElementById('resBoyMoon');
+            if (resBoyMoonEl) resBoyMoonEl.textContent = `Moon: ${boyMoonInfo.rashiName} (${boyMoonInfo.nakshatraName}) ${boyManglik.isManglik ? '[Manglik]' : '[Non-Manglik]'}`;
+
+            const resGirlNameEl = document.getElementById('resGirlName');
+            if (resGirlNameEl) resGirlNameEl.textContent = girlName;
+
+            const resGirlMoonEl = document.getElementById('resGirlMoon');
+            if (resGirlMoonEl) resGirlMoonEl.textContent = `Moon: ${girlMoonInfo.rashiName} (${girlMoonInfo.nakshatraName}) ${girlManglik.isManglik ? '[Manglik]' : '[Non-Manglik]'}`;
+
+            let scoreValEl = document.getElementById('gunaScoreVal');
+            if (scoreValEl) scoreValEl.innerHTML = `${match.totalGuna}<span class="total">/36</span>`;
+
+            let verdictEl = document.getElementById('gunaVerdict');
+            if (verdictEl) verdictEl.textContent = match.verdict;
+
+            const resContainer = document.getElementById('matchResultsContainer');
+            if (resContainer) resContainer.scrollIntoView({ behavior: 'smooth' });
+        });
+    }
+
+    // PDF / Print Export Handlers
+    const exportPdfBtn = document.getElementById('export-pdf-btn');
+    if (exportPdfBtn) {
+        exportPdfBtn.addEventListener('click', () => {
+            window.print();
+        });
+    }
+
+    const printBtns = document.querySelectorAll('.btn-primary, .nav-cta button, #reportExportPdfBtn');
+    printBtns.forEach(btn => {
+        if (btn.textContent.includes('Report') || btn.textContent.includes('PDF') || btn.textContent.includes('Print')) {
+            btn.addEventListener('click', () => {
+                window.print();
+            });
+        }
+    });
+});
+
+
