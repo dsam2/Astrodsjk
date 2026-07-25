@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Dark Cosmic Background Radial Gradient -->
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#0f0728" />
+    </radialGradient>
+
+    <!-- Golden Celestial Accent Gradient -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="50%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+
+    <!-- Deep Violet Outer Ring Gradient -->
+    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC" />
+      <stop offset="100%" stop-color="#7E22CE" />
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#bgGlow)" stroke="url(#goldGradient)" stroke-width="8" />
+
+  <!-- Outer Zodiac Ring -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="url(#ringGradient)" stroke-width="4" stroke-dasharray="12 8" opacity="0.7" />
+
+  <!-- Inner Astrological Diamond Grid (North Indian Kundali Motif) -->
+  <polygon points="256,76 436,256 256,436 76,256" fill="none" stroke="url(#goldGradient)" stroke-width="6" opacity="0.85" />
+  <rect x="126" y="126" width="260" height="260" fill="none" stroke="url(#goldGradient)" stroke-width="4" opacity="0.6" />
+
+  <!-- Central Sun/Star Core -->
+  <circle cx="256" cy="256" r="48" fill="url(#goldGradient)" filter="url(#glow)" />
+
+  <!-- 8-Point Cosmic Rays -->
+  <g stroke="url(#goldGradient)" stroke-width="6" stroke-linecap="round">
+    <line x1="256" y1="120" x2="256" y2="180" />
+    <line x1="256" y1="332" x2="256" y2="392" />
+    <line x1="120" y1="256" x2="180" y2="256" />
+    <line x1="332" y1="256" x2="392" y2="256" />
+
+    <line x1="160" y1="160" x2="202" y2="202" />
+    <line x1="310" y1="310" x2="352" y2="352" />
+    <line x1="352" y1="160" x2="310" y2="202" />
+    <line x1="202" y1="310" x2="160" y2="352" />
+  </g>
+
+  <!-- Crescent Moon Symbol Overlay -->
+  <path d="M260 216 A40 40 0 0 1 296 286 A44 44 0 1 0 260 216 Z" fill="#FFFFFF" opacity="0.9" filter="url(#glow)" />
+</svg>
