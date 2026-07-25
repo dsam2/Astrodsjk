@@ -194,6 +194,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let eastSvg = ChartRenderer.renderEastIndianSVG(vargas.D1, vargas.D1.Ascendant);
 
         // Update SVG Containers
+        let chartDisplayCard = document.getElementById('chartDisplayCard');
+        if (chartDisplayCard) chartDisplayCard.classList.remove('hidden');
+
         let chartDisplay = document.getElementById('chartDisplay');
         if (chartDisplay) chartDisplay.innerHTML = selectedSvg;
 
@@ -316,10 +319,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Initial default preview render on page load
-    if (window.AstroEngine && window.ChartRenderer) {
-        triggerCalculation(false);
-    }
+    // Initial state: website starts completely clean without preloaded data
+    // Horoscope is calculated only when user enters birth details and clicks Generate Horoscope
 
     // Form Generate Buttons & Event Listeners
     const formGenBtn = document.getElementById('generateChartBtn') || document.querySelector('.birth-form button');
@@ -428,7 +429,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // Gun Milan & Synastry
             let match = AstroEngine.calculateGunMilan(boyPlanets.Moon, girlPlanets.Moon);
 
-            // Update UI
+            // Update UI & Unhide Match Results Container
+            const matchResultsContainer = document.getElementById('matchResultsContainer');
+            if (matchResultsContainer) matchResultsContainer.classList.remove('hidden');
+
             const resBoyNameEl = document.getElementById('resBoyName');
             if (resBoyNameEl) resBoyNameEl.textContent = boyName;
 

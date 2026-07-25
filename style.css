@@ -414,10 +414,15 @@ section {
     50% { transform: rotateX(60deg) rotateZ(20deg) translateZ(20px); }
 }
 
-/* Forms */
+/* Forms & Birth Details Layout */
 .birth-details-section {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .birth-form-card {
@@ -425,6 +430,7 @@ section {
     width: 100%;
     position: relative;
     overflow: visible;
+    box-sizing: border-box;
 }
 
 .form-form {

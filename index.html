@@ -96,21 +96,21 @@
                 <h2 class="section-title text-center">Birth Details</h2>
                 <form class="birth-form">
                     <div class="form-group">
-                        <input type="text" id="fullName" required placeholder=" " value="John Doe">
+                        <input type="text" id="fullName" required placeholder=" ">
                         <label for="fullName">Full Name</label>
                     </div>
                     <div class="form-row">
                         <div class="form-group half">
-                            <input type="date" id="dob" required placeholder=" " value="1995-05-15">
+                            <input type="date" id="dob" required placeholder=" ">
                             <label for="dob">Date of Birth</label>
                         </div>
                         <div class="form-group half">
-                            <input type="time" id="tob" required placeholder=" " value="10:30">
+                            <input type="time" id="tob" required placeholder=" ">
                             <label for="tob">Time of Birth</label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <input type="text" id="birthPlace" required placeholder=" " value="New Delhi">
+                        <input type="text" id="birthPlace" required placeholder=" ">
                         <label for="birthPlace">Birth Place</label>
                         <!-- Autocomplete UI placeholder -->
                         <div class="autocomplete-dropdown hidden">
@@ -123,15 +123,15 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group third">
-                            <input type="number" id="lat" step="any" required placeholder=" " value="28.6139">
+                            <input type="number" id="lat" step="any" placeholder=" ">
                             <label for="lat">Latitude (°N)</label>
                         </div>
                         <div class="form-group third">
-                            <input type="number" id="long" step="any" required placeholder=" " value="77.2090">
+                            <input type="number" id="long" step="any" placeholder=" ">
                             <label for="long">Longitude (°E)</label>
                         </div>
                         <div class="form-group third">
-                            <input type="number" id="timezone" step="any" required placeholder=" " value="5.5">
+                            <input type="number" id="timezone" step="any" placeholder=" ">
                             <label for="timezone">Timezone Offset (hrs)</label>
                         </div>
                     </div>
@@ -161,7 +161,7 @@
             </div>
 
             <!-- SVG Main Chart Display Container -->
-            <div id="chartDisplayCard" class="glass-card printable-report-card" style="margin-top: 2rem; padding: 1.5rem; text-align: center;">
+            <div id="chartDisplayCard" class="glass-card printable-report-card hidden" style="padding: 1.5rem; text-align: center; width: 100%; max-width: 850px;">
                 <h3 style="margin-bottom: 1rem; color: var(--accent-primary);">Generated Vedic Horoscope Chart</h3>
                 <div id="chartDisplay" class="chart-display-container" style="max-width: 500px; margin: 0 auto;"></div>
             </div>
@@ -390,16 +390,16 @@
                     <div class="partner-form">
                         <h4 style="margin-bottom: 1rem; color: var(--accent-primary);">Boy's Details</h4>
                         <div class="form-group mb-4">
-                            <input type="text" id="boyName" placeholder=" " value="Boy Native">
+                            <input type="text" id="boyName" placeholder=" ">
                             <label for="boyName">Full Name</label>
                         </div>
                         <div class="form-row">
                             <div class="form-group half">
-                                <input type="date" id="boyDob" value="1994-08-20">
+                                <input type="date" id="boyDob" placeholder=" ">
                                 <label for="boyDob">Date of Birth</label>
                             </div>
                             <div class="form-group half">
-                                <input type="time" id="boyTob" value="14:15">
+                                <input type="time" id="boyTob" placeholder=" ">
                                 <label for="boyTob">Time of Birth</label>
                             </div>
                         </div>
@@ -407,16 +407,16 @@
                     <div class="partner-form">
                         <h4 style="margin-bottom: 1rem; color: var(--accent-primary);">Girl's Details</h4>
                         <div class="form-group mb-4">
-                            <input type="text" id="girlName" placeholder=" " value="Girl Native">
+                            <input type="text" id="girlName" placeholder=" ">
                             <label for="girlName">Full Name</label>
                         </div>
                         <div class="form-row">
                             <div class="form-group half">
-                                <input type="date" id="girlDob" value="1996-11-10">
+                                <input type="date" id="girlDob" placeholder=" ">
                                 <label for="girlDob">Date of Birth</label>
                             </div>
                             <div class="form-group half">
-                                <input type="time" id="girlTob" value="09:45">
+                                <input type="time" id="girlTob" placeholder=" ">
                                 <label for="girlTob">Time of Birth</label>
                             </div>
                         </div>
@@ -425,21 +425,21 @@
                 <button type="button" id="calcMatchBtn" class="btn btn-primary btn-full mt-4" style="margin-top: 1.5rem;">Calculate Gun Milan (36 Points)</button>
             </div>
             
-            <div class="comp-container glass-card printable-report-card" id="matchResultsContainer">
+            <div class="comp-container glass-card printable-report-card hidden" id="matchResultsContainer">
                 <div class="comp-profile boy">
                     <h3 id="resBoyName">Boy Native</h3>
-                    <p id="resBoyMoon">Moon in Scorpio</p>
+                    <p id="resBoyMoon">Moon Position</p>
                 </div>
                 <div class="comp-score-center">
                     <div class="score-circle">
                         <div class="score-ring"></div>
-                        <div class="score-value font-num" id="gunaScoreVal">31<span class="total">/36</span></div>
-                        <div class="score-label" id="gunaVerdict">Excellent Match</div>
+                        <div class="score-value font-num" id="gunaScoreVal">0<span class="total">/36</span></div>
+                        <div class="score-label" id="gunaVerdict">Match Score</div>
                     </div>
                 </div>
                 <div class="comp-profile girl">
                     <h3 id="resGirlName">Girl Native</h3>
-                    <p id="resGirlMoon">Moon in Pisces</p>
+                    <p id="resGirlMoon">Moon Position</p>
                 </div>
             </div>
         </section>
