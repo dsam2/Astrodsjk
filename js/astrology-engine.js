@@ -377,6 +377,7 @@ const AstroEngine = (() => {
             rashiName: rashi.name,
             rashiHindi: rashi.hindi,
             rashiDeg: `${degInt}° ${minInt}'`,
+            degInRashiFormatted: `${degInt}° ${minInt}'`,
             nakshatraName: nakshatra.name,
             nakshatraLord: nakshatra.lord,
             pada: pada
