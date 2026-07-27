@@ -220,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Julian Day & Ephemeris Calculation
         let JD = AstroEngine.julianDay(year, month, day, hour, minute, 0, tzVal);
         let planets = AstroEngine.calculatePlanets(JD, latVal, longVal);
+        let vargas = AstroEngine.calculateVargas(planets);
         // Populate Print / PDF Report Details
         const pName = document.getElementById('printName'); if (pName) pName.textContent = fullName;
         const pDob = document.getElementById('printDob'); if (pDob) pDob.textContent = dob;
