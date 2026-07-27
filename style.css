@@ -630,12 +630,29 @@ section {
 }
 
 .planet-icon {
-    width: 40px; height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    flex-shrink: 0;
 }
-.sun-icon { background: linear-gradient(135deg, #FFB75E, #ED8F03); }
-.moon-icon { background: linear-gradient(135deg, #e2e8f0, #94a3b8); }
-.mars-icon { background: linear-gradient(135deg, #ef4444, #991b1b); }
+
+.sun-icon { background: linear-gradient(135deg, #FFB75E, #ED8F03); box-shadow: 0 0 15px rgba(237, 143, 3, 0.4); }
+.moon-icon { background: linear-gradient(135deg, #F8FAFC, #94A3B8); color: #1E293B; box-shadow: 0 0 15px rgba(248, 250, 252, 0.3); }
+.mars-icon { background: linear-gradient(135deg, #EF4444, #991B1B); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+.mercury-icon { background: linear-gradient(135deg, #34D399, #059669); box-shadow: 0 0 15px rgba(52, 211, 153, 0.4); }
+.jupiter-icon { background: linear-gradient(135deg, #FBBF24, #D97706); box-shadow: 0 0 15px rgba(251, 191, 36, 0.4); }
+.venus-icon { background: linear-gradient(135deg, #F472B6, #DB2777); box-shadow: 0 0 15px rgba(244, 114, 182, 0.4); }
+.saturn-icon { background: linear-gradient(135deg, #818CF8, #4F46E5); box-shadow: 0 0 15px rgba(129, 140, 248, 0.4); }
+.rahu-icon { background: linear-gradient(135deg, #A855F7, #6B21A8); box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); }
+.ketu-icon { background: linear-gradient(135deg, #F97316, #C2410C); box-shadow: 0 0 15px rgba(249, 115, 22, 0.4); }
+.ascendant-icon { background: linear-gradient(135deg, #38BDF8, #0284C7); box-shadow: 0 0 15px rgba(56, 189, 248, 0.4); }
 
 .planet-stats {
     display: flex;

@@ -268,17 +268,23 @@ document.addEventListener('DOMContentLoaded', () => {
             let planetHTML = '';
             const planetList = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn', 'Rahu', 'Ketu'];
 
+            const planetSymbols = {
+                Sun: '☀️', Moon: '🌙', Mars: '♂', Mercury: '☿',
+                Jupiter: '♃', Venus: '♀', Saturn: '♄', Rahu: '☊', Ketu: '☋'
+            };
+
             planetList.forEach(p => {
                 let info = AstroEngine.getDegreeInfo(planets[p]);
-                let isExalted = (p === 'Sun' && info.rashiIndex === 1) || (p === 'Moon' && info.rashiIndex === 2);
-                let isDebilitated = (p === 'Sun' && info.rashiIndex === 7) || (p === 'Mars' && info.rashiIndex === 4);
+                let isExalted = (p === 'Sun' && info.rashiIndex === 1) || (p === 'Moon' && info.rashiIndex === 2) || (p === 'Venus' && info.rashiIndex === 12);
+                let isDebilitated = (p === 'Sun' && info.rashiIndex === 7) || (p === 'Mars' && info.rashiIndex === 4) || (p === 'Venus' && info.rashiIndex === 6);
                 let badgeClass = isExalted ? 'badge-exalted' : isDebilitated ? 'badge-debilitated' : 'badge-own';
                 let badgeText = isExalted ? 'Exalted' : isDebilitated ? 'Debilitated' : 'Direct';
+                let symbol = planetSymbols[p] || '✦';
 
                 planetHTML += `
                     <div class="planet-card glass-card">
                         <div class="planet-header">
-                            <div class="planet-icon ${p.toLowerCase()}-icon"></div>
+                            <div class="planet-icon ${p.toLowerCase()}-icon">${symbol}</div>
                             <h3>${p}</h3>
                         </div>
                         <div class="planet-stats">
