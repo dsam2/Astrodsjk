@@ -45,43 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Autocomplete & City Details UI
-    const birthPlaceInput = document.getElementById('birthPlace');
-    const autocompleteDropdown = document.querySelector('.autocomplete-dropdown');
-    
-    if (birthPlaceInput && autocompleteDropdown) {
-        birthPlaceInput.addEventListener('focus', () => {
-            autocompleteDropdown.classList.remove('hidden');
-        });
-        
-        document.addEventListener('click', (e) => {
-            if (!birthPlaceInput.contains(e.target) && !autocompleteDropdown.contains(e.target)) {
-                autocompleteDropdown.classList.add('hidden');
-            }
-        });
-        
-        const items = autocompleteDropdown.querySelectorAll('.ac-item');
-        items.forEach(item => {
-            item.addEventListener('click', () => {
-                birthPlaceInput.value = item.textContent;
-                autocompleteDropdown.classList.add('hidden');
-                // Auto-lookup city coordinates if available
-                if (window.AstroEngine && window.AstroEngine.CITIES_DB) {
-                    const cityObj = AstroEngine.CITIES_DB.find(c => c.name.toLowerCase().includes(item.textContent.toLowerCase()));
-                    if (cityObj) {
-                        const latEl = document.getElementById('lat');
-                        const longEl = document.getElementById('long');
-                        const tzEl = document.getElementById('timezone');
-                        if (latEl) latEl.value = cityObj.lat;
-                        if (longEl) longEl.value = cityObj.lng;
-                        if (tzEl) tzEl.value = cityObj.tz;
-                    }
-                }
-                triggerCalculation(false);
-            });
-        });
-    }
-
     // 4. FAQ Accordion
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
