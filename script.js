@@ -278,6 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let startDate = new Date(d.start);
                 let endDate = new Date(d.end);
                 let status = (now >= startDate && now <= endDate) ? 'active' : (now > endDate) ? 'past' : 'future';
+                let badgeLabel = status === 'active' ? 'Active' : (status === 'past' ? 'Completed' : 'Upcoming');
 
                 let antardashaHTML = '';
                 if (d.antardashas) {
@@ -289,14 +290,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 dashaHTML += `
-                    <div class="dasha-node ${status} accordion-item" data-index="${idx}" style="cursor: pointer;">
-                        <div class="node-circle"></div>
-                        <div class="node-content">
-                            <h4>${d.planet} Mahadasha</h4>
-                            <span class="font-num">${d.start.slice(0,4)} - ${d.end.slice(0,4)}</span>
-                            <div class="dasha-accordion-content hidden" style="margin-top: 0.5rem; text-align: left;">
-                                ${antardashaHTML}
-                            </div>
+                    <div class="dasha-node ${status} accordion-item" data-index="${idx}">
+                        <div class="dasha-node-header">
+                            <div class="node-circle"></div>
+                            <h4 style="font-size: 1.05rem; margin: 0; font-family: var(--font-heading);">${d.planet} Mahadasha</h4>
+                            <span class="dasha-badge">${badgeLabel}</span>
+                        </div>
+                        <div class="dasha-dates font-num" style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem;">
+                            📅 ${d.start.slice(0,4)} – ${d.end.slice(0,4)}
+                        </div>
+                        <div class="dasha-accordion-toggle" style="font-size: 0.75rem; color: var(--accent-primary); opacity: 0.8;">
+                            Click to view Antardashas ▼
+                        </div>
+                        <div class="dasha-accordion-content hidden" style="margin-top: 0.75rem; padding-top: 0.5rem; border-top: 1px solid var(--glass-border); width: 100%;">
+                            ${antardashaHTML}
                         </div>
                     </div>
                 `;
