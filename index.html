@@ -158,7 +158,23 @@
 
             <!-- SVG Main Chart Display Container -->
             <div id="chartDisplayCard" class="glass-card printable-report-card hidden" style="padding: 1.5rem; text-align: center; width: 100%; max-width: 850px;">
-                <h3 style="margin-bottom: 1rem; color: var(--accent-primary);">Generated Vedic Horoscope Chart</h3>
+                <!-- PDF / Print Only User Details Summary -->
+                <div id="printUserSummary" class="print-only-summary">
+                    <div style="text-align: center; margin-bottom: 1rem; border-bottom: 2px solid #111; padding-bottom: 0.75rem;">
+                        <h1 style="font-size: 20pt; margin: 0 0 0.25rem; color: #111; font-family: serif;">Vedic Horoscope Report</h1>
+                        <p style="margin: 0; font-size: 9pt; color: #555;">AstroDSJK • Offline Ephemeris System</p>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.5rem; margin-bottom: 1rem; border: 1px solid #ccc; padding: 0.75rem 1rem; border-radius: 6px; font-size: 9.5pt; text-align: left;">
+                        <div><strong>Full Name:</strong> <span id="printName">-</span></div>
+                        <div><strong>Date of Birth:</strong> <span id="printDob">-</span></div>
+                        <div><strong>Time of Birth:</strong> <span id="printTob">-</span></div>
+                        <div><strong>Birth Place:</strong> <span id="printPlace">-</span></div>
+                        <div><strong>Coordinates:</strong> <span id="printCoords">-</span></div>
+                        <div><strong>Timezone Offset:</strong> <span id="printTz">-</span></div>
+                    </div>
+                </div>
+
+                <h3 class="screen-only-title" style="margin-bottom: 1rem; color: var(--accent-primary);">Generated Vedic Horoscope Chart</h3>
                 <div id="chartDisplay" class="chart-display-container" style="max-width: 500px; margin: 0 auto;"></div>
             </div>
         </section>

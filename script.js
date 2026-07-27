@@ -177,7 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Julian Day & Ephemeris Calculation
         let JD = AstroEngine.julianDay(year, month, day, hour, minute, 0, tzVal);
         let planets = AstroEngine.calculatePlanets(JD, latVal, longVal);
-        let vargas = AstroEngine.calculateVargas(planets);
+        // Populate Print / PDF Report Details
+        const pName = document.getElementById('printName'); if (pName) pName.textContent = fullName;
+        const pDob = document.getElementById('printDob'); if (pDob) pDob.textContent = dob;
+        const pTob = document.getElementById('printTob'); if (pTob) pTob.textContent = tob;
+        const pPlace = document.getElementById('printPlace'); if (pPlace) pPlace.textContent = cityName;
+        const pCoords = document.getElementById('printCoords'); if (pCoords) pCoords.textContent = `${latVal}° N, ${longVal}° E`;
+        const pTz = document.getElementById('printTz'); if (pTz) pTz.textContent = `+${tzVal} hrs`;
 
         // Render SVG Chart based on selected style
         let selectedSvg = '';

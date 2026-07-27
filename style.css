@@ -1234,18 +1234,22 @@ option {
     background-color: #FFFFFF;
 }
 
+.print-only-summary {
+    display: none;
+}
+
 /* ==========================================================================
    MILESTONE 5: COMPREHENSIVE @media print STYLESHEET RULES
    ========================================================================== */
 @media print {
-    /* 1. Hide non-printable UI controls */
+    /* 1. Hide non-printable UI controls and website sections */
     .navbar,
     .nav-container,
     .nav-links,
     .nav-cta,
     .theme-btn,
     .hero-buttons,
-    .birth-details-section form,
+    .birth-details-section .birth-form-card,
     .birth-form,
     .form-buttons-row,
     button,
@@ -1253,6 +1257,8 @@ option {
     #export-pdf-btn,
     #generateChartBtn,
     #calcMatchBtn,
+    .chart-preview-section,
+    .compatibility-section,
     .faq-section,
     .footer,
     .cosmic-bg,
@@ -1261,8 +1267,13 @@ option {
     .autocomplete-dropdown,
     .hero,
     .features-section,
-    .understanding-section {
+    .understanding-section,
+    .screen-only-title {
         display: none !important;
+    }
+
+    .print-only-summary {
+        display: block !important;
     }
 
     /* 2. Global Reset for Multi-Page Printable Layout */
