@@ -308,6 +308,70 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         }
 
+        // Render KP System
+        if (AstroEngine.calculateKPAstrology) {
+            const kpData = AstroEngine.calculateKPAstrology(planets);
+            const kpContainer = document.getElementById('kpContainer');
+            if (kpContainer) {
+                let kpHTML = '';
+                Object.keys(kpData).forEach(p => {
+                    let d = kpData[p];
+                    kpHTML += `
+                        <div class="kp-card glass-card" style="padding: 1rem; border-radius: 8px;">
+                            <h4 style="color: var(--accent-primary); margin-bottom: 0.5rem;">${p}</h4>
+                            <div style="font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.25rem;">
+                                <div><strong>Sign:</strong> ${d.rashi} (${d.degree})</div>
+                                <div><strong>Nakshatra:</strong> ${d.nakshatra}</div>
+                                <div><strong>Star Lord:</strong> <span style="color: var(--accent-secondary);">${d.starLord}</span></div>
+                                <div><strong>Sub Lord:</strong> <span style="color: #f59e0b; font-weight: 600;">${d.subLord}</span></div>
+                            </div>
+                        </div>
+                    `;
+                });
+                kpContainer.innerHTML = kpHTML;
+            }
+        }
+
+        // Render Jaimini Karakas
+        if (AstroEngine.calculateJaiminiKarakas) {
+            const jaiminiData = AstroEngine.calculateJaiminiKarakas(planets);
+            const jaiminiContainer = document.getElementById('jaiminiContainer');
+            if (jaiminiContainer) {
+                let jaiminiHTML = '';
+                jaiminiData.forEach(k => {
+                    jaiminiHTML += `
+                        <div class="jaimini-card glass-card" style="padding: 1rem; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <h4 style="color: var(--accent-primary); margin: 0;">${k.planet}</h4>
+                                <span style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 700; font-size: 0.8rem;">${k.code}</span>
+                            </div>
+                            <div style="font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">${k.role}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">${k.desc}</div>
+                        </div>
+                    `;
+                });
+                jaiminiContainer.innerHTML = jaiminiHTML;
+            }
+        }
+
+        // Render Yogas
+        if (AstroEngine.calculateYogas) {
+            const yogasData = AstroEngine.calculateYogas(planets);
+            const yogasContainer = document.getElementById('yogasContainer');
+            if (yogasContainer) {
+                let yogasHTML = '';
+                yogasData.forEach(y => {
+                    yogasHTML += `
+                        <div class="yoga-card glass-card" style="padding: 1rem; border-radius: 8px; border-left: 4px solid var(--accent-primary);">
+                            <h4 style="color: var(--accent-primary); margin-bottom: 0.25rem;">${y.name} <small style="font-size: 0.75rem; opacity: 0.8; font-weight: normal;">[${y.type}]</small></h4>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">${y.desc}</p>
+                        </div>
+                    `;
+                });
+                yogasContainer.innerHTML = yogasHTML;
+            }
+        }
+
         // Render Dasha Timeline & Accordion
         let birthDateObj = new Date(year, month - 1, day);
         let dashaTimeline = AstroEngine.calculateVimshottari(planets.Moon, birthDateObj);
@@ -403,6 +467,34 @@ document.addEventListener('DOMContentLoaded', () => {
             triggerCalculation(false);
         });
     }
+
+    // Wire Premium Features Grid Cards to smooth scroll to their sections
+    const featureCards = document.querySelectorAll('.features-grid .feature-card');
+    const featureTargets = [
+        'kundali',          // 1. Birth Charts
+        'kp-system',        // 2. KP Astrology
+        'jaimini-system',   // 3. Jaimini System
+        'planets',          // 4. Planetary Details
+        'predictions',      // 5. Dasha Timeline
+        'panchang',         // 6. Daily Panchang
+        'yogas-section',    // 7. Yogas
+        'compatibility'     // 8. Compatibility
+    ];
+
+    featureCards.forEach((card, idx) => {
+        if (featureTargets[idx]) {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetSec = document.getElementById(featureTargets[idx]);
+                if (targetSec) {
+                    const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 80;
+                    const targetPos = targetSec.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 20;
+                    window.scrollTo({ top: targetPos, behavior: 'smooth' });
+                }
+            });
+        }
+    });
 
     // Interactive Preview Buttons on Chart Cards (North, South, East)
     const chartCards = document.querySelectorAll('.chart-card');

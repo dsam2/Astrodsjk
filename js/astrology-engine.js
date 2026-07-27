@@ -1154,6 +1154,138 @@ const AstroEngine = (() => {
         };
     }
 
+    // --- JAIMINI KARAKAS (7-KARAKA SYSTEM) ---
+    function calculateJaiminiKarakas(planets) {
+        const pList = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn'];
+        const karakaNames = [
+            { code: 'AK', role: 'Atmakaraka', desc: 'Soul & Primary Destiny' },
+            { code: 'AmK', role: 'Amatyakaraka', desc: 'Career, Mind & Profession' },
+            { code: 'BK', role: 'Bhratrikaraka', desc: 'Siblings, Gurus & Courage' },
+            { code: 'MK', role: 'Matrikaraka', desc: 'Mother, Home & Property' },
+            { code: 'PK', role: 'Putrakaraka', desc: 'Children, Creativity & Intelligence' },
+            { code: 'GK', role: 'Gnatikaraka', desc: 'Obstacles, Health & Competition' },
+            { code: 'DK', role: 'Darakaraka', desc: 'Spouse, Life Partner & Relationships' }
+        ];
+
+        let sorted = pList.map(name => {
+            let lon = planets[name];
+            let degInRashi = lon % 30;
+            return { name, lon, degInRashi };
+        }).sort((a, b) => b.degInRashi - a.degInRashi);
+
+        return sorted.map((item, idx) => ({
+            planet: item.name,
+            code: karakaNames[idx].code,
+            role: karakaNames[idx].role,
+            desc: karakaNames[idx].desc,
+            degInRashi: item.degInRashi
+        }));
+    }
+
+    // --- KP ASTROLOGY (STAR LORD & SUB LORD SYSTEM) ---
+    function calculateKPAstrology(planets) {
+        const LORDS_ORDER = ["Ketu", "Venus", "Sun", "Moon", "Mars", "Rahu", "Jupiter", "Saturn", "Mercury"];
+        const DASHA_YEARS = [7, 20, 6, 10, 7, 18, 16, 19, 17];
+        const TOTAL_YEARS = 120;
+
+        const getStarAndSub = (lon) => {
+            let nakDeg = 13 + 20 / 60; // 13° 20'
+            let nakIndex = Math.floor(lon / nakDeg) % 27;
+            let starLord = NAKSHATRAS[nakIndex].lord;
+
+            let remDeg = lon % nakDeg;
+            let starStartIdx = LORDS_ORDER.indexOf(starLord);
+
+            let subDegAccum = 0;
+            let subLord = starLord;
+            for (let i = 0; i < 9; i++) {
+                let currentIdx = (starStartIdx + i) % 9;
+                let subSpan = (DASHA_YEARS[currentIdx] / TOTAL_YEARS) * nakDeg;
+                subDegAccum += subSpan;
+                if (remDeg <= subDegAccum) {
+                    subLord = LORDS_ORDER[currentIdx];
+                    break;
+                }
+            }
+
+            return { starLord, subLord };
+        };
+
+        let result = {};
+        const pList = ['Sun', 'Moon', 'Mars', 'Mercury', 'Jupiter', 'Venus', 'Saturn', 'Rahu', 'Ketu', 'Ascendant'];
+        pList.forEach(name => {
+            if (planets[name] !== undefined) {
+                let info = getDegreeInfo(planets[name]);
+                let kp = getStarAndSub(planets[name]);
+                result[name] = {
+                    rashi: info.rashiName,
+                    degree: info.degInRashiFormatted,
+                    nakshatra: info.nakshatraName,
+                    starLord: kp.starLord,
+                    subLord: kp.subLord
+                };
+            }
+        });
+        return result;
+    }
+
+    // --- PLANETARY YOGAS DETECTION ---
+    function calculateYogas(planets) {
+        let yogas = [];
+        let sunRashi = Math.floor(planets.Sun / 30) + 1;
+        let moonRashi = Math.floor(planets.Moon / 30) + 1;
+        let mercRashi = Math.floor(planets.Mercury / 30) + 1;
+        let marsRashi = Math.floor(planets.Mars / 30) + 1;
+        let jupRashi = Math.floor(planets.Jupiter / 30) + 1;
+
+        // 1. Budhaditya Yoga (Sun + Mercury conjunction)
+        if (sunRashi === mercRashi) {
+            yogas.push({
+                name: "Budhaditya Yoga",
+                type: "Auspicious (Intellect & Fame)",
+                desc: "Sun and Mercury conjunction in same sign brings high intelligence, administrative skills, and sharp communication."
+            });
+        }
+
+        // 2. Gaja Kesari Yoga (Jupiter in Kendra from Moon)
+        let moonJupDiff = Math.abs(jupRashi - moonRashi) % 12;
+        if (moonJupDiff === 0 || moonJupDiff === 3 || moonJupDiff === 6 || moonJupDiff === 9) {
+            yogas.push({
+                name: "Gaja Kesari Yoga",
+                type: "Royal (Wisdom & Prosperity)",
+                desc: "Jupiter in Kendra from Moon grants wisdom, financial stability, high social standing, and protection from adversity."
+            });
+        }
+
+        // 3. Chandra Mangala Yoga (Moon + Mars conjunction)
+        if (moonRashi === marsRashi) {
+            yogas.push({
+                name: "Chandra Mangala Yoga",
+                type: "Financial (Wealth & Enterprise)",
+                desc: "Moon and Mars combination creates strong financial ambition, entrepreneurship, and material accumulation."
+            });
+        }
+
+        // 4. Guru Mangala Yoga (Jupiter + Mars)
+        if (jupRashi === marsRashi) {
+            yogas.push({
+                name: "Guru Mangala Yoga",
+                type: "Leadership & Righteousness",
+                desc: "Jupiter and Mars combination enhances bravery, righteousness, legal success, and executive leadership."
+            });
+        }
+
+        if (yogas.length === 0) {
+            yogas.push({
+                name: "Lagna Shubha Combination",
+                type: "Foundational Balance",
+                desc: "Benefic planetary placements support overall life vitality and personal growth."
+            });
+        }
+
+        return yogas;
+    }
+
     // --- PUBLIC INTERFACE ---
     return {
         RASHIS,
@@ -1167,7 +1299,10 @@ const AstroEngine = (() => {
         calculateVimshottari,
         calculatePanchang,
         calculateGunMilan,
-        calculateManglikDosha
+        calculateManglikDosha,
+        calculateJaiminiKarakas,
+        calculateKPAstrology,
+        calculateYogas
     };
 })();
 
