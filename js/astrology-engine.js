@@ -97,13 +97,29 @@ const AstroEngine = (() => {
         { name: "Jaipur, India", lat: 26.9124, lng: 75.7873, tz: 5.5 },
         { name: "Pune, India", lat: 18.5204, lng: 73.8567, tz: 5.5 },
         { name: "Varanasi, India", lat: 25.3176, lng: 82.9739, tz: 5.5 },
+        { name: "Lucknow, India", lat: 26.8467, lng: 80.9462, tz: 5.5 },
+        { name: "Chandigarh, India", lat: 30.7333, lng: 76.7794, tz: 5.5 },
+        { name: "Patna, India", lat: 25.5941, lng: 85.1376, tz: 5.5 },
+        { name: "Surat, India", lat: 21.1702, lng: 72.8311, tz: 5.5 },
+        { name: "Kochi, India", lat: 9.9312, lng: 76.2673, tz: 5.5 },
+        { name: "Bhopal, India", lat: 23.2599, lng: 77.4126, tz: 5.5 },
+        { name: "Indore, India", lat: 22.7196, lng: 75.8577, tz: 5.5 },
+        { name: "Kathmandu, Nepal", lat: 27.7172, lng: 85.3240, tz: 5.75 },
         { name: "London, UK", lat: 51.5074, lng: -0.1278, tz: 0 },
         { name: "New York, USA", lat: 40.7128, lng: -74.0060, tz: -5 },
+        { name: "Los Angeles, USA", lat: 34.0522, lng: -118.2437, tz: -8 },
+        { name: "Chicago, USA", lat: 41.8781, lng: -87.6298, tz: -6 },
         { name: "San Francisco, USA", lat: 37.7749, lng: -122.4194, tz: -8 },
         { name: "Toronto, Canada", lat: 43.6532, lng: -79.3832, tz: -5 },
+        { name: "Vancouver, Canada", lat: 49.2827, lng: -123.1207, tz: -8 },
         { name: "Sydney, Australia", lat: -33.8688, lng: 151.2093, tz: 10 },
+        { name: "Melbourne, Australia", lat: -37.8136, lng: 144.9631, tz: 10 },
         { name: "Dubai, UAE", lat: 25.2048, lng: 55.2708, tz: 4 },
-        { name: "Singapore", lat: 1.3521, lng: 103.8198, tz: 8 }
+        { name: "Singapore", lat: 1.3521, lng: 103.8198, tz: 8 },
+        { name: "Tokyo, Japan", lat: 35.6762, lng: 139.6503, tz: 9 },
+        { name: "Paris, France", lat: 48.8566, lng: 2.3522, tz: 1 },
+        { name: "Berlin, Germany", lat: 52.5200, lng: 13.4050, tz: 1 },
+        { name: "Moscow, Russia", lat: 55.7558, lng: 37.6173, tz: 3 }
     ];
 
     // --- MATHEMATICAL HELPERS ---

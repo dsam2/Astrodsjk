@@ -152,6 +152,86 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // City Auto-lookup & Coordinates Auto-fill
+    const birthPlaceInput = document.getElementById('birthPlace');
+    const latInput = document.getElementById('lat');
+    const longInput = document.getElementById('long');
+    const tzInput = document.getElementById('timezone');
+
+    if (birthPlaceInput && window.AstroEngine && window.AstroEngine.CITIES_DB) {
+        const acContainer = document.createElement('div');
+        acContainer.className = 'autocomplete-dropdown hidden';
+        if (birthPlaceInput.parentElement) {
+            birthPlaceInput.parentElement.appendChild(acContainer);
+        }
+
+        const updateLocationCoords = (cityName) => {
+            if (!cityName) return;
+            const query = cityName.trim().toLowerCase();
+            const match = window.AstroEngine.CITIES_DB.find(c => 
+                c.name.toLowerCase().includes(query) || 
+                query.includes(c.name.split(',')[0].toLowerCase())
+            );
+            if (match) {
+                if (latInput) latInput.value = match.lat;
+                if (longInput) longInput.value = match.lng;
+                if (tzInput) tzInput.value = match.tz;
+            }
+        };
+
+        birthPlaceInput.addEventListener('input', (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            if (query.length < 1) {
+                acContainer.classList.add('hidden');
+                return;
+            }
+
+            const matches = window.AstroEngine.CITIES_DB.filter(c => 
+                c.name.toLowerCase().includes(query)
+            );
+
+            if (matches.length > 0) {
+                acContainer.innerHTML = matches.map(c => `
+                    <div class="ac-item" data-name="${c.name}" data-lat="${c.lat}" data-lng="${c.lng}" data-tz="${c.tz}">
+                        📍 ${c.name} <small style="opacity: 0.7;">(${c.lat}°N, ${c.lng}°E)</small>
+                    </div>
+                `).join('');
+                acContainer.classList.remove('hidden');
+            } else {
+                acContainer.classList.add('hidden');
+            }
+
+            updateLocationCoords(query);
+        });
+
+        acContainer.addEventListener('click', (e) => {
+            const item = e.target.closest('.ac-item');
+            if (item) {
+                const name = item.getAttribute('data-name');
+                const lat = item.getAttribute('data-lat');
+                const lng = item.getAttribute('data-lng');
+                const tz = item.getAttribute('data-tz');
+
+                birthPlaceInput.value = name;
+                if (latInput) latInput.value = lat;
+                if (longInput) longInput.value = lng;
+                if (tzInput) tzInput.value = tz;
+
+                acContainer.classList.add('hidden');
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!birthPlaceInput.contains(e.target) && !acContainer.contains(e.target)) {
+                acContainer.classList.add('hidden');
+            }
+        });
+
+        birthPlaceInput.addEventListener('change', (e) => {
+            updateLocationCoords(e.target.value);
+        });
+    }
+
     // 7. Interactive Offline Horoscope Generator & Ephemeris Engine
     const triggerCalculation = (scroll = true) => {
         if (!window.AstroEngine || !window.ChartRenderer) return;
